@@ -588,7 +588,7 @@
             </div>
             <div class="confirm-btn-panel pull-right">
                 <div class="btn-holder pull-right">
-                    <input type="button" class="row-dialog-btn btn btn-naked" value="Đóng" onclick="reloadPage()" />
+                    <input type="button" class="row-dialog-btn btn btn-naked" value="Đóng" onclick="redirectToMyProjectQuotations()" />
                 </div>
             </div>
         </div>
@@ -1436,7 +1436,7 @@
             $('#quotationId').text('Mã báo giá: Q' + quotation.quotationId);
             $('#quotationName').text('Tên báo giá: ' + quotation.project.projName);
             $('#contentRequestQuotation').text('Yêu cầu của khách hàng: ' + quotation.contentRequestQuotation)
-            if(mainProjectStatus === 5){
+            if(mainProjectStatus === 5 || hasRequestIsWaiting()){
                 $('#supplierName').text('Nhà cung cấp: ' + quotation.project.rooms[0].roomProducts[0].productDetail.supplierProduct.supplier.supName);
                 fillRoomsOfQuotation(quotation.project.rooms);
                 $('.btnDiv').attr('hidden', 'hidden');
@@ -1446,6 +1446,19 @@
                 $('#supplierName').text('Nhà cung cấp: ' + quotation.project.rooms[0].roomProducts[0].productDetail.supplierProduct.supplier.supName);
                 fillRoomsOfQuotation(quotation.project.rooms);
                 $('.btnDiv').removeAttr('hidden');
+            }
+        }
+        async function hasRequestIsWaiting() {
+            try {
+                const resp = await $.ajax({
+                    url: 'http://localhost:8080/api/main-project/has-request-is-waiting?mainProjectId=' + mainProjectId,
+                    method: 'GET',
+                    contentType: 'application/json'
+                });
+                return resp.data;
+            } catch (error) {
+                console.error(error);
+                return false; // Xử lý lỗi và trả về false nếu có lỗi xảy ra
             }
         }
         function fillRoomsOfQuotation(rooms) {
@@ -1563,7 +1576,8 @@
                         quotationId: 0,
                         requestTime: new Date(),
                         status: 1,
-                        contentRequestQuotation: $('#contentRequest').val()
+                        contentRequestQuotation: $('#contentRequest').val(),
+                        preQuotationId: quotationId
                     }
                 ]
             }
@@ -1575,7 +1589,7 @@
                 success:function (resp) {
                     console.log(resp)
                     $('#BlockUIConfirm2').hide();
-                    $('#BlockUIConfirm4').find('.confirmBody').text('Đã gửi yêu cầu báo giá mới!');
+                    $('#BlockUIConfirm4').find('.confirm-body').text('Một báo giá mới vừa được tạo với nội dung là: ' + $('#contentRequest').val());
                     $('#BlockUIConfirm4').show();
                 }, error:function (err) {
                     console.log(err)
@@ -1585,6 +1599,10 @@
 
         function reloadPage() {
             window.location.href = '/quotation-information?mainProjectId=' + mainProjectId + '&quotationId=' + quotationId;
+        }
+
+        function redirectToMyProjectQuotations() {
+            window.location.href = 'my-project/quotations?mainProjectId=' + mainProjectId;
         }
 
     </script>
