@@ -1188,7 +1188,6 @@
                 '                                                    <h5 class="card-title fw-semibold mb-4">DỰ ÁN ' + (i+1) + '</h5>\n' +
                 '                                                    <div class="project-buttons">\n' +
                 '                                                        <button style="width: 50%" class="btn btn-primary m-1" onclick="redirectToViewQuotationLists('+ mainProjectList[i].main_project_id + ')">Xem báo giá</button>\n' +
-                '                                                        <button style="width: 50%" class="btn btn-primary m-1" >Xem thiết kế</button>\n' +
                 '                                                    </div>\n' +
                 '                                                </div>\n' +
                 '                                            </div>\n' +
@@ -1198,6 +1197,8 @@
     }
     function getStatusName(status) {
         switch (status) {
+            case 0:
+                return "Đã hủy";
             case 1:
                 return "Đang chờ nhân viên";
             case 2:
@@ -1207,14 +1208,8 @@
             case 4:
                 return "Chấp thuận báo giá";
             case 5:
-                return "Cập nhật thiết kế";
-            case 6:
-                return "Kiểm duyệt thiết kế";
-            case 7:
-                return "Chấp thuận thiết kế";
-            case 8:
                 return "Đang thi công";
-            case 9:
+            case 6:
                 return "Đã hoàn thành";
             default:
                 return "";
