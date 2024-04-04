@@ -377,11 +377,13 @@
         <!--  Header End -->
         <div class="container-fluid">
         </div>
+        <select id=projectCategoryId hidden="true">
+        </select>
 
 
 
         <!--            TABLE BÁO GIÁ Ở ĐÂY!!!-->
-        <div class="container-fluid">
+        <div class="container-fluid" style="margin-bottom: -40px">
             <div class="container-fluid" style="margin-top: -164px;">
                 <div class="card">
                     <div class="card-body">
@@ -455,8 +457,32 @@
             </div>
         </div>
     </div>
-</div>
-
+                <div class="vc_row wpb_row vc_row-fluid vc_custom_1599629333435" style="padding-left: 700px; width: 89%">
+                    <div class="wpb_column vc_column_container vc_col-sm-6">
+                        <div class="vc_column-inner">
+                            <div class="wpb_wrapper">
+                                <div class="gf_browser_chrome gform_wrapper" id="gform_wrapper_3">
+                                    <form method="post" enctype="multipart/form-data" target="gform_ajax_frame_3" id="gform_3" action="/lien-he/">
+                                        <input type="hidden" class="gforms-pum" value="{&quot;closepopup&quot;:false,&quot;closedelay&quot;:0,&quot;openpopup&quot;:false,&quot;openpopup_id&quot;:0}">
+                                        <div class="gform_body">
+                                            <ul id="gform_fields_3" class="gform_fields top_label description_below">
+                                                <li id="field_3_8" class="gfield     gform_hidden"><input name="input_8" id="input_3_8" type="hidden" class="gform_hidden" value=""></li>
+                                                <li id="field_3_10" class="gfield gfap_placeholder">
+                                                    <label class="gfield_label" for="contentRequest" style="display: none;">Yêu cầu</label>
+                                                    <div class="ginput_container"><textarea style="height: 100px" name="input_10" id="contentRequest" class="textarea small" tabindex="15" rows="10" cols="50" placeholder="Yêu cầu"></textarea></div>
+                                                </li>
+                                                <li id="field_3_12" class="gfield gform_hidden"><input name="input_12" id="input_3_12" type="hidden" class="gform_hidden" value=""></li>
+                                            </ul>
+                                        </div>
+                                        <div class="gform_footer top_label" style="margin-top: -30px"> <input onclick="getMainProject()" type="button" id="gform_submit_button_3" class="gform_button button" value="Đăng ký tư vấn" tabindex="16" ><input type="hidden" name="gform_ajax" value="form_id=3&amp;title=&amp;description=&amp;tabindex=11">
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 <div class="footer">
     <div class="menufooter">
@@ -1541,6 +1567,9 @@
         //     let selectProduct = commonParentRow.find('.selectProduct');
         //     selectProduct.trigger('change');
         // });
+        if($(this).prev().find('tbody tr').length > 1) {
+            $(this).prev().prev().prop('disabled', true);
+        }
     });
 
     function fillSelectProductAfterAddNewRecord(newSelectProduct, callback) {
@@ -1578,11 +1607,14 @@
         $(this).closest('tr').remove();
         parentBody.next().find('.sumOfTotalPrice').text((((getSumOfTotalPrice(parentBody) * 1000)).toFixed(0)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + '₫');
         getTotalPriceOfAllRoom();
+
+        if(table.find('tbody tr').length === 1) {
+            table.prev().removeAttr('disabled');
+        }
+        // $(this).prev().prev().prev().removeAttr('disabled');
+
     });
 
-    $('#supplierId').change(function() {
-        $('.selectProduct').trigger('change');
-    });
     $(document).on('change', '.selectProduct', function() {
         var supId = $('#supplierId').val()
         var proId = $(this).val()
@@ -1660,6 +1692,9 @@
         });
     }
 
+    $('#supplierId').change(function() {
+        $('[name="inputLength"]').trigger('change');
+    });
     $(document).on('change keyup', '[name="inputLength"], [name="inputWidth"], [name="inputHeight"], [name="inputProductQuantity"]', async function () {
         let parentRow = $(this).closest('tr');
         try {
@@ -1759,6 +1794,79 @@
         $('#totalPriceOfAllRoom').text('Tổng giá sơ bộ: ' + (((totalPriceOfAllRoom * 1000)).toFixed(0)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + '₫');
     }
 
+    function getMainProject() {
+
+        let mainProjectDTO =  {
+            mainProjectId: 0,
+            customerId: 'C111',
+            staffId: 'S1',
+            status: 1,
+            quotations: [
+                {
+                    quotationId: 0,
+                    status: 1,
+                    contentRequestQuotation: $('#contentRequest').val(),
+                    project: {
+                        projId: 0,
+                        projName: "",
+                        projectCategoryId: $('#projectCategoryId').val(),
+                        quotationId: 0,
+                        supplierId: $('#supplierId').val(),
+                        rooms: []
+                    }
+                }
+            ]
+        }
+
+        $('.selectRoomCategory').each(function (index) {
+            let table = $(this).next();
+            let roomCatId = $(this).val();
+            let roomName = getRoomName(roomCatId);
+            let room = {
+                roomId: 0,
+                roomName: 'Quotation ID: '  + ' - ' + roomName,
+                roomCategoryId: roomCatId,
+                productDetailList: []
+            }
+            table.find('.display-input-none-border').each(function (index) {
+                let productDetail = {
+                    proId: $(this).find('.selectProduct').val(),
+                    proLength: parseFloat($(this).find('[data-name="txtProductLength"]').text()),
+                    proWidth: parseFloat($(this).find('[data-name="txtProductWidth"]').text()),
+                    proHeight: parseFloat($(this).find('[data-name="txtProductHeight"]').text()),
+                    quantity: $(this).find('[name="inputProductQuantity"]').val(),
+                    totalPrice: convertCurrencyToNumber($(this).find('[data-name="txtProductTotalPrice"]').text()) // Xóa ký tự ₫ và dấu phẩy trước khi chuyển đổi sang số
+                }
+                if($(this).find('[data-name="txtProductLength"]').find('input').length > 0) {
+                    productDetail.proLength = parseFloat($(this).find('[data-name="txtProductLength"]').find('input').val());
+                }
+                if($(this).find('[data-name="txtProductWidth"]').find('input').length > 0) {
+                    productDetail.proWidth = parseFloat($(this).find('[data-name="txtProductWidth"]').find('input').val());
+                }
+                if($(this).find('[data-name="txtProductHeight"]').find('input').length > 0) {
+                    productDetail.proHeight = parseFloat($(this).find('[data-name="txtProductHeight"]').find('input').val());
+                }
+                room.productDetailList.push(productDetail)
+            })
+            mainProjectDTO.quotations[0].project.rooms.push(room);
+        })
+        SaveMainProject(mainProjectDTO)
+    }
+
+    function SaveMainProject(mainProjectDTO) {
+        $.ajax({
+            url: 'http://localhost:8080/api/main-project/save-with-first-quotation-has-information',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(mainProjectDTO),
+            success:function (resp) {
+                console.log(resp)
+            }, error:function (err) {
+                console.log(err)
+            }
+        })
+    }
+
     function getRoomName(index) {
         switch (index) {
             case "1":
@@ -1788,6 +1896,180 @@
 
 <script>
 
+    const urlParams = new URLSearchParams(window.location.search);
+    let projectId;
+
+    $(document).ready(function () {
+        projectId = urlParams.get('projectId');
+        getQuotationInformation();
+        getCategoryProject();
+    })
+
+    function getCategoryProject() {
+        $.ajax({
+            url: 'http://localhost:8080/api/project/categoryProject',
+            method: 'GET',
+            contentType: 'application/json',
+            success: function (resp) {
+                fillCategoryProject(resp.data)
+            }
+        });
+    }
+    function fillCategoryProject(list) {
+        let str = "";
+        for (let i = 0; i < list.length; i++) {
+            str += '<option value="' + list[i].projCategoryId + '">' + list[i].categoryName +'</option>'
+        }
+        $('#projectCategoryId').html(str)
+    }
+
+    function getQuotationInformation() {
+        $.ajax({
+            url: 'http://localhost:8080/api/project?projId=' + projectId,
+            method: 'GET',
+            contentType: 'application/json',
+            success: async function (resp) {
+                fillQuotationByLastQuotation(resp.data);
+            }
+        });
+    }
+
+    //thuc chat lastQuotation o day la Project chu ko phai Quotation
+    function fillQuotationByLastQuotation(lastQuotation) {
+        deleteInitialElement()
+        $('#projectCategoryId').val(lastQuotation.categoryProject.projCategoryId);
+        $('#supplierId').val(lastQuotation.rooms[0].roomProducts[0].productDetail.supplierProduct.supplier.supId);
+        var str = ''
+        for (let i = 0; i < lastQuotation.rooms.length; i++) {
+            ++tableCount;
+            // Tạo HTML cho bảng mới
+            str = '<label name="lblRoom" style="margin-top: 50px">Chọn loại phòng:</label>\n' +
+                '                                <select class="selectRoomCategory form-select" id="roomCategoryId'+ tableCount +'" style="width: 15%" aria-label="Default select example">\n' +
+                '                                </select>\n' +
+                '                                <table class="content-table show-product" id="manage-product-table'+ tableCount +'" style="margin-bottom: 0px; margin-top: 5px">\n' +
+                '                                    <thead>\n' +
+                '                                    <tr>\n' +
+                '                                        <th class="display-column" rowspan="2">Sản phẩm</th>\n' +
+                '                                        <th class="display-column" rowspan="2">Mô tả</th>\n' +
+                '                                        <th class="display-column" colspan="3">Kích thước</th>\n' +
+                '                                        <th class="display-column" rowspan="2">Đơn vị</th>\n' +
+                '                                        <th class="display-column" rowspan="2">Số lượng</th>\n' +
+                '                                        <th class="display-column" rowspan="2">Đơn giá</th>\n' +
+                '                                        <th rowspan="2">Hình tham khảo</th>\n' +
+                '                                        <th class="display-column" rowspan="2">Thành tiền</th>\n' +
+                '                                        <th rowspan="2"></th>\n' +
+                '                                    </tr>\n' +
+                '                                    <tr>\n' +
+                '                                        <th>Dài</th>\n' +
+                '                                        <th>Rộng</th>\n' +
+                '                                        <th>Cao</th>\n' +
+                '                                    </tr>\n' +
+                '                                    </thead>\n' +
+                '                                    <tbody>\n' +
+                '                                   </tbody>\n' +
+                '                                   <tfoot>\n' +
+                '           <tr>\n' +
+                '               <td colspan="9">Tổng sơ bộ</td>\n' +
+                '               <td class="sumOfTotalPrice text-aligh-center" colspan="1"></td>\n' +
+                '           </tr>\n' +
+                '   </tfoot>\n' +
+                '</table>'
+            $('#addNewTable').before(str);
+            for (let j = 0; j < lastQuotation.rooms[i].roomProducts.length; j++) {
+                str =
+                    '                                        <tr class="display-input-none-border">\n' +
+                    '                                            <td style="width: 150px">\n' +
+                    '                                                <select class="selectProduct" id="product'+ selectProductCount +'" style="width: 200px">\n' +
+                    '                                                </select>\n' +
+                    '                                            </td>' +
+                    '                                            <td style="width: 150px" data-name="txtProductDescription"></td>' +
+                    '                                            <td style="width: 75px; text-align: center" colspan="1" data-name="txtProductLength"></td>' +
+                    '                                            <td style="width: 75px; text-align: center" colspan="1" data-name="txtProductWidth"></td>' +
+                    '                                            <td style="width: 75px; text-align: center" colspan="1" data-name="txtProductHeight"></td>' +
+                    '                                            <td style="width: 68px; text-align: center" data-name="txtProductMeasureUnit"></td>' +
+                    '                                            <td style="width: 75px; text-align: center"><input style="width: 60px; text-align: center" type="number" min="0" max="10000" name="inputProductQuantity"></td>' +
+                    '                                            <td style="width: 65px; text-align: center" data-name="txtProductUnitPrice"></td>' +
+                    '                                            <td></td>' +
+                    '                                            <td style="text-align: center" data-name="txtProductTotalPrice"></td>' +
+                    '                                            <td><button name="btnDeleteRecord" class="delete-icon"><i style="font-size:12px" class="fa">&#xf00d;</i></button></td>' +
+                    '                                        </tr>\n'
+                $('#addNewTable').prev().find('tbody').append(str);
+                fetchProductByLastQuotation(lastQuotation.rooms[i].categoryRoom.roomCategoryId, selectProductCount, lastQuotation.rooms[i].roomProducts[j].productDetail.supplierProduct.product.proId)
+                fetchProductDetailByLastQuotation($('#product' + selectProductCount).closest('tr'), lastQuotation.rooms[i].roomProducts[j]);
+                $('#addNewTable').prev().find('.sumOfTotalPrice').text((((getSumOfTotalPrice($('#addNewTable').prev().find('tbody')) * 1000)).toFixed(0)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + '₫');
+                selectProductCount++;
+            }
+            getCategoryRoom2(tableCount, lastQuotation.rooms[i].categoryRoom.roomCategoryId)
+            getTotalPriceOfAllRoom();
+
+            var addNewRecord = $('<button name="addNewRecord" class="btn btn-primary m-1">+</button>');
+            var deleteTable = $('<button name="deleteTable" class="btn btn-primary m-1">Xóa phòng</button>');
+            // Thêm hai phần tử mới vào trước phần tử có id là addNewTable
+            $('#addNewTable').before(addNewRecord, deleteTable);
+            if(addNewRecord.prev().find('tbody tr').length > 1) {
+                $(addNewRecord).prev().prev().prop('disabled', true);
+            }
+        }
+    }
+
+    function deleteInitialElement() {
+        $('[name="deleteTable"]').trigger('click')
+    }
+
+    //chon loai phong theo last quotation
+    function getCategoryRoom2(tableCount, roomCategoryId) {
+        $.ajax({
+            url: 'http://localhost:8080/api/categoryRoom',
+            method: 'GET',
+            contentType: 'application/json',
+            success: function (resp) {
+                fillCategoryRoom2(resp.data, tableCount, roomCategoryId)
+            }
+        })
+    }
+    function fillCategoryRoom2(list, tableCount, roomCategoryId) {
+        let roomCategoryIdElement = $('#roomCategoryId' + tableCount)
+        for (let i = 0; i < list.length; i++) {
+            if(list[i].roomCategoryId===roomCategoryId) roomCategoryIdElement.append('<option selected value="' + list[i].roomCategoryId +'">' + list[i].categoryName +'</option>')
+            else roomCategoryIdElement.append('<option value="' + list[i].roomCategoryId +'">' + list[i].categoryName +'</option>')
+        }
+    }
+
+    function fetchProductByLastQuotation(roomCategoryId, selectProductCount, productId) {
+        let productElement = $('#product' + selectProductCount)
+
+        // Gọi API để lấy danh sách sản phẩm dựa trên roomCategoryId
+        $.ajax({
+            url: 'http://localhost:8080/api/product/roomCategory?roomCategoryId=' + roomCategoryId,
+            method: 'GET',
+            async: false,
+            contentType: 'application/json',
+            success: function (resp) {
+                for (let i = 0; i < resp.data.length; i++) {
+                    if(resp.data[i].pro_id === productId)
+                        productElement.append('<option selected value="' + resp.data[i].pro_id +'">' + resp.data[i].pro_name +'</option>');
+                    else
+                        productElement.append('<option value="' + resp.data[i].pro_id +'">' + resp.data[i].pro_name +'</option>');
+                }
+            }
+        });
+    }
+    function fetchProductDetailByLastQuotation(tr, roomProducts) {
+        tr.find('[data-name="txtProductDescription"]').text(roomProducts.productDetail.supplierProduct.product.proDescription)
+        var cusLength = roomProducts.productDetail.supplierProduct.product.measureUnit.cusLength
+        var cusWidth = roomProducts.productDetail.supplierProduct.product.measureUnit.cusWidth
+        var cusHeight = roomProducts.productDetail.supplierProduct.product.measureUnit.cusHeight
+        cusLength === false ? tr.find('[data-name="txtProductLength"]').text(roomProducts.productDetail.proLength)
+            : tr.find('[data-name="txtProductLength"]').html('<input name="inputLength" type="number" min="0" max="10000" style="width: 60px; text-align: center" value="' + roomProducts.productDetail.proLength +'"/>')
+        cusWidth === false ? tr.find('[data-name="txtProductWidth"]').text(roomProducts.productDetail.proWidth)
+            : tr.find('[data-name="txtProductWidth"]').html('<input name="inputWidth" type="number" min="0" max="10000" style="width: 60px; text-align: center" value="' + roomProducts.productDetail.proWidth +'"/>')
+        cusHeight === false ? tr.find('[data-name="txtProductHeight"]').text(roomProducts.productDetail.proHeight)
+            : tr.find('[data-name="txtProductHeight"]').html('<input name="inputHeight" type="number" min="0" max="10000" style="width: 60px; text-align: center" value="' + roomProducts.productDetail.proHeight +'"/>')
+        tr.find('[data-name="txtProductMeasureUnit"]').text(roomProducts.productDetail.supplierProduct.product.measureUnit.measureUnitName)
+        tr.find('[name="inputProductQuantity"]').val(roomProducts.quantity)
+        tr.find('[data-name="txtProductUnitPrice"]').text((roomProducts.productDetail.supplierProduct.unitPrice*1000000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + '₫')
+        tr.find('[data-name="txtProductTotalPrice"]').text((roomProducts.totalPrice*1000000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + '₫')
+    }
 
 </script>
 

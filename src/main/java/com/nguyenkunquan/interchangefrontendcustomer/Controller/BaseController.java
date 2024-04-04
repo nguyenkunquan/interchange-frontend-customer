@@ -26,5 +26,13 @@ public class BaseController {
     public String registerQuotation() {
         return "dang-ki-bao-gia";
     }
+    @GetMapping("/finished-project")
+    public String finishedProject() {
+        return "du-an-hoan-thien";
+    }
+    @GetMapping("/finished-project-details")
+    public String finishedProjectDetails() {
+        return "chi-tiet-du-an-hoan-thien";
+    }
 
 }
