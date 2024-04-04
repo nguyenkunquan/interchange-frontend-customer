@@ -1381,6 +1381,8 @@
     }
     function getStatusName(status) {
         switch (status) {
+            case 0:
+                return "Đã hủy";
             case 1:
                 return "Đang chờ nhân viên";
             case 2:
@@ -1390,14 +1392,8 @@
             case 4:
                 return "Chấp thuận báo giá";
             case 5:
-                return "Cập nhật thiết kế";
-            case 6:
-                return "Kiểm duyệt thiết kế";
-            case 7:
-                return "Chấp thuận thiết kế";
-            case 8:
                 return "Đang thi công";
-            case 9:
+            case 6:
                 return "Đã hoàn thành";
             default:
                 return "";

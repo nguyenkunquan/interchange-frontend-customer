@@ -1181,7 +1181,7 @@
         for (let i = 0; i < mainProjectList.length; i++) {
             str += '<div class="card no-shadow">\n' +
                 '                                            <div class="customer-project-display">\n' +
-                '                                                <div class="project-status status-have-response">' + getStatusName(mainProjectList[i].status) +'</div>\n' +
+                '                                                <div class="project-status'+ i +' status-have-response"><h5 style="color: white">' + getStatusName(mainProjectList[i].status) +'</h5></div>\n' +
                 '                                                <div class="project-image"><img th:src="@{/md/image/0007-450x320.jpg}"\n' +
                 '                                                        alt=""></div>\n' +
                 '                                                <div class="project-content">\n' +

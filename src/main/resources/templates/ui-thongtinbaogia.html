@@ -1436,7 +1436,7 @@
             $('#quotationId').text('Mã báo giá: Q' + quotation.quotationId);
             $('#quotationName').text('Tên báo giá: ' + quotation.project.projName);
             $('#contentRequestQuotation').text('Yêu cầu của khách hàng: ' + quotation.contentRequestQuotation)
-            if(mainProjectStatus === 5 || hasRequestIsWaiting()){
+            if(mainProjectStatus >= 5 || hasRequestIsWaiting()){
                 $('#supplierName').text('Nhà cung cấp: ' + quotation.project.rooms[0].roomProducts[0].productDetail.supplierProduct.supplier.supName);
                 fillRoomsOfQuotation(quotation.project.rooms);
                 $('.btnDiv').attr('hidden', 'hidden');
@@ -1448,18 +1448,17 @@
                 $('.btnDiv').removeAttr('hidden');
             }
         }
-        async function hasRequestIsWaiting() {
-            try {
-                const resp = await $.ajax({
-                    url: 'http://localhost:8080/api/main-project/has-request-is-waiting?mainProjectId=' + mainProjectId,
-                    method: 'GET',
-                    contentType: 'application/json'
-                });
-                return resp.data;
-            } catch (error) {
-                console.error(error);
-                return false; // Xử lý lỗi và trả về false nếu có lỗi xảy ra
-            }
+        function hasRequestIsWaiting() {
+            let flag = false;
+            $.ajax({
+                url: 'http://localhost:8080/api/main-project/has-request-is-waiting?mainProjectId=' + mainProjectId,
+                method: 'GET',
+                contentType: 'application/json',
+                success: function (resp) {
+                    flag = resp.data;
+                }
+            });
+            return flag;
         }
         function fillRoomsOfQuotation(rooms) {
             let previousElement = $('.show-content')
