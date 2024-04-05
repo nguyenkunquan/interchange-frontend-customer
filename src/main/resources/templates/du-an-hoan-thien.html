@@ -235,114 +235,94 @@
                 <ul id="menu-main-menu" class="menu">
                     <li
                             class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item menu-item-home">
-                        <a href="index.html">Trang chủ</a>
+                        <a href="http://localhost:3000/Home">Trang chủ</a>
                     </li>
                     <li class="menu-item menu-item-type-post_type menu-item-object-page">
-                        <a href="gioi-thieu.html">Giới thiệu</a>
+                        <a href="http://localhost:3000/Gioi_Thieu">Giới thiệu</a>
                     </li>
 
                     <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children">
-                        <a href="">Thiết Kế Nội Thất</a>
+                        <a >Thiết Kế Nội Thất</a>
                         <ul class="sub-menu">
                             <li class="menu-item menu-item-type-taxonomy menu-item-object-category"><a
-                                    href="tknt-tat-ca-thiet-ke.html">Tất cả thiết kế</a></li>
+                                    href="http://localhost:3000/TKNT_ALL">Tất cả thiết kế</a></li>
                             <li class="menu-item menu-item-type-taxonomy menu-item-object-category"><a
-                                    href="tknt-tu-bep.html">Tủ bếp</a></li>
+                                    href="http://localhost:3000/TKNT_Tu_Bep">Tủ bếp</a></li>
                             <li class="menu-item menu-item-type-taxonomy menu-item-object-category"><a
-                                    href="tknt-phong-ngu.html">Phòng ngủ</a></li>
+                                    href="http://localhost:3000/TKNT_Phong_ngu">Phòng ngủ</a></li>
                             <li class="menu-item menu-item-type-taxonomy menu-item-object-category"><a
-                                    href="tknt-phong-khach.html">Phòng khách</a></li>
+                                    href="http://localhost:3000/TKNT_Phong_Khach">Phòng khách</a></li>
                             <li class="menu-item menu-item-type-taxonomy menu-item-object-category"><a
-                                    href="tknt-phong-tho.html">Phòng thờ</a></li>
+                                    href="http://localhost:3000/TKNT_Phong_Tho">Phòng thờ</a></li>
                             <li class="menu-item menu-item-type-taxonomy menu-item-object-category"><a
-                                    href="tknt-phong-giai-tri.html">Phòng giải trí</a></li>
+                                    href="http://localhost:3000/TKNT_Phong_Gia_Tri">Phòng giải trí</a></li>
                         </ul>
                     </li>
                     <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children">
                         <a href="">Dự án hoàn thiện</a>
                         <ul class="sub-menu">
+                            <li class="menu-item menu-item-type-taxonomy menu-item-object-category">
+                                <a th:href="@{/finished-project(categoryProjectId=${1})}">Biệt
+                                    thự</a></li>
                             <li class="menu-item menu-item-type-taxonomy menu-item-object-category"><a
-                                    onclick="redirectToFinishedProject(1)">Biệt
-                                thự</a></li>
-                            <li class="menu-item menu-item-type-taxonomy menu-item-object-category"><a
-                                     onclick="redirectToFinishedProject(2)">Căn
+                                    th:href="@{/finished-project(categoryProjectId=${2})}">Căn
                                 hộ</a></li>
                             <li class="menu-item menu-item-type-taxonomy menu-item-object-category"><a
-                                     onclick="redirectToFinishedProject(3)">Nhà
+                                    th:href="@{/finished-project(categoryProjectId=${3})}">Nhà
                                 phố</a></li>
                             <li class="menu-item menu-item-type-taxonomy menu-item-object-category"><a
-                                     onclick="redirectToFinishedProject(4)">Shop
+                                    th:href="@{/finished-project(categoryProjectId=${4})}">Shop
                                 store</a></li>
                             <li class="menu-item menu-item-type-taxonomy menu-item-object-category"><a
-                                    onclick="redirectToFinishedProject(5)">Văn
+                                    th:href="@{/finished-project(categoryProjectId=${5})}">Văn
                                 phòng</a></li>
                         </ul>
                     </li>
                     <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children">
-                        <a href="">Sản phẩm</a>
+                        <a >Sản phẩm</a>
                         <ul class="sub-menu">
                             <li class="menu-item menu-item-type-post_type menu-item-object-post"><a
-                                    href="sp-tam-op-tuong-PVC.html">Tấm ốp
+                                    href="http://localhost:3000">Tấm ốp
                                 tường PVC</a></li>
                             <li class="menu-item menu-item-type-post_type menu-item-object-post"><a
-                                    href="sp-san-nhua.html">Sàn
+                                    href="http://localhost:3000">Sàn
                                 nhựa</a></li>
                             <li class="menu-item menu-item-type-post_type menu-item-object-post"><a
-                                    href="sp-san-go.html">Sàn
+                                    href="http://localhost:3000">Sàn
                                 gỗ</a></li>
                             <li class="menu-item menu-item-type-post_type menu-item-object-post"><a
-                                    href="sp-lam-nhua.html">Lam
+                                    href="http://localhost:3000">Lam
                                 nhựa</a></li>
                             <li class="menu-item menu-item-type-post_type menu-item-object-post"><a
-                                    href="sp-cua-nhua-go-composite.html">Cửa nhựa
+                                    href="http://localhost:3000">Cửa nhựa
                                 gỗ Composite</a></li>
                             <li class="menu-item menu-item-type-post_type menu-item-object-post"><a
-                                    href="sp-rem-vai-2-lop.html">Rèm vải
+                                    href="http://localhost:3000">Rèm vải
                                 2 lớp</a></li>
                             <li class="menu-item menu-item-type-post_type menu-item-object-post"><a
-                                    href="sp-rem-all.html">Rèm cầu
+                                    href="http://localhost:3000">Rèm cầu
                                 vồng, rèm Roman, rèm sáo lá, rèm cuốn</a></li>
-                            <li class="menu-item menu-item-type-post_type menu-item-object-post"><a
-                                    href="sp-da-tu-nhien.html">Đá tự
-                                nhiên</a></li>
-                            <li class="menu-item menu-item-type-post_type menu-item-object-post"><a
-                                    href="sp-da-nhan-tao.html">Đá nhân
-                                tạo</a></li>
-                            <li class="menu-item menu-item-type-post_type menu-item-object-post"><a
-                                    href="sp-da-solid-surface.html">Đá Solid
-                                Surface</a></li>
-                            <li class="menu-item menu-item-type-post_type menu-item-object-post"><a
-                                    href="sp-da-nhan-tao-vicostone.html">Đá nhân
-                                tạo Vicostone</a></li>
                         </ul>
                     </li>
                     <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children">
-                        <a href="#">Báo giá</a>
-                        <ul class="sub-menu">
-                            <li class="menu-item menu-item-type-post_type menu-item-object-page"><a
-                                    href="bao-gia-thiet-ke.html">Báo giá
-                                thiết kế</a></li>
-                            <li class="menu-item menu-item-type-post_type menu-item-object-page"><a
-                                    href="bao-gia-thi-cong.html">Báo giá
-                                thi công</a></li>
-                        </ul>
+                        <a th:href="@{/register-quotation}">Báo giá</a>
                     </li>
                     <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children">
-                        <a href="phong-ngu-dep.html">Tư vấn</a>
+                        <a href="http://localhost:3000/Tin_Tuc">Tin tức</a>
                     </li>
-                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="lien-he.html">Liên
-                        hệ</a></li>
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a th:href="@{/consulting}">Tư
+                        vấn</a></li>
                     <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children">
-                        <a href="dang-nhap.html">NHẬT MINH</a>
+                        <a>NHẬT MINH</a>
                         <ul class="sub-menu">
                             <li class="menu-item menu-item-type-post_type menu-item-object-page"><a
-                                    href="dang-nhap.html">PROFILE</a></li>
+                            >PROFILE</a></li>
                             <li class="menu-item menu-item-type-post_type menu-item-object-page"><a
-                                    href="dang-ky.html" style="margin-right: 15px">TÀI KHOẢN</a></li>
+                                    style="margin-right: 15px">TÀI KHOẢN</a></li>
                             <li class="menu-item menu-item-type-post_type menu-item-object-page"><a
-                                    href="ui-duancuaban.html" style="margin-right: 15px">DỰ ÁN CỦA BẠN</a></li>
+                                    th:href="@{/my-projects}" style="margin-right: 15px">DỰ ÁN CỦA BẠN</a></li>
                             <li class="menu-item menu-item-type-post_type menu-item-object-page"><a
-                                    href="dang-ky.html" style="margin-right: 15px">ĐĂNG XUẤT</a></li>
+                                    style="margin-right: 15px">ĐĂNG XUẤT</a></li>
                         </ul>
                     </li>
                 </ul>
